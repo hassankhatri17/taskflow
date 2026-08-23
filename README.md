@@ -148,12 +148,3 @@ npx playwright test --headed
   never included in any API response.
 - Task ownership is checked server-side on every read/update/delete, so one
   user can't touch another user's tasks (covered by a dedicated test).
-
-## Recording the demo video
-
-Suggested flow for the LinkedIn video:
-
-1. `cd backend && npm test` — show all backend tests passing
-2. `cd frontend && npm test` — show all frontend tests passing
-3. Start both dev servers, then `cd e2e && npx playwright test --headed` —
-   show the E2E test driving a real browser through the app
