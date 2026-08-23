@@ -1,11 +1,28 @@
 const express = require("express");
 const cors = require("cors");
+const compression = require("compression");
 const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/tasks");
 
 function createApp() {
   const app = express();
-  app.use(cors());
+
+  // In production, restrict CORS to the deployed frontend origin(s) via
+  // CORS_ORIGIN (comma-separated list). Falls back to "*" for local dev.
+  const allowedOrigins = (process.env.CORS_ORIGIN || "*")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+  app.use(
+    cors({
+      origin:
+        allowedOrigins.length === 1 && allowedOrigins[0] === "*"
+          ? "*"
+          : allowedOrigins,
+    })
+  );
+  app.use(compression());
   app.use(express.json());
 
   app.get("/api/health", (req, res) => res.json({ status: "ok" }));

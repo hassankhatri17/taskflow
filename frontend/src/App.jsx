@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import LoginForm from "./components/LoginForm";
-import RegisterForm from "./components/RegisterForm";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import * as api from "./api";
+
+// RegisterForm is only needed on the (less common) sign-up path, so it's
+// split into its own chunk and only fetched once the user asks for it —
+// keeps the initial bundle smaller for the common login case.
+const RegisterForm = lazy(() => import("./components/RegisterForm"));
 
 export default function App() {
   const [token, setToken] = useState(null);
@@ -85,7 +89,9 @@ export default function App() {
           <section className="card">
             {error && <p role="alert" className="alert">{error}</p>}
             {showRegister ? (
-              <RegisterForm onRegister={handleRegister} />
+              <Suspense fallback={<p className="alert">Loading…</p>}>
+                <RegisterForm onRegister={handleRegister} />
+              </Suspense>
             ) : (
               <LoginForm onLogin={handleLogin} />
             )}
