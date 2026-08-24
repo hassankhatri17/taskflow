@@ -1,4 +1,5 @@
 # TaskFlow
+Week 5 | Task 1 of my Internship at Neurofive Solutions
 
 A minimal full-stack task manager. Built in Week 5 to demonstrate testing
 across the whole stack (unit/component/integration/E2E), then deployed to
@@ -196,6 +197,7 @@ npx playwright test --headed
   never included in any API response.
 - Task ownership is checked server-side on every read/update/delete, so one
   user can't touch another user's tasks (covered by a dedicated test).
+<<<<<<< HEAD
 
 ## Deployment
 
@@ -298,3 +300,5 @@ Once live, verify on the actual deployed URL (not localhost):
    mobile and desktop
 3. Show the before/after Lighthouse scores side by side (screenshot or
    DevTools Lighthouse tab) and briefly name the 3 fixes above
+=======
+>>>>>>> 63ba405a7994231372d0fcf94a2c14493e073c78
