@@ -18,18 +18,17 @@ production with a performance and SEO pass.
 
 ## Architecture overview
 
-┌─────────────────────┐ HTTPS / JSON ┌──────────────────────┐
-│ Frontend (SPA) │ ──────────────────────────▶│ Backend (API) │
-│ React + Vite │ │ Node.js + Express │
-│ hosted on Netlify │◀────────────────────────── │ hosted on Render │
-└──────────┬───────────┘ Bearer JWT └───────────┬──────────┘
-│ │
-│ static build (dist/) served via Netlify's CDN │ in-memory
-│ VITE_API_URL points at the Render backend │ data store
-▼ ▼
-Browser (mobile/desktop) users[] / tasks[]
-
-
+┌─────────────────────┐        HTTPS / JSON        ┌──────────────────────┐
+│   Frontend (SPA)     │ ──────────────────────────▶│   Backend (API)      │
+│   React + Vite       │                             │   Node.js + Express  │
+│   hosted on Netlify  │◀──────────────────────────  │   hosted on Render   │
+└──────────┬───────────┘        Bearer JWT           └───────────┬──────────┘
+           │                                                     │
+           │ static build (dist/) served via Netlify's CDN       │ in-memory
+           │ VITE_API_URL points at the Render backend           │ data store
+           ▼                                                     ▼
+      Browser (mobile/desktop)                          users[] / tasks[]
+      
 - The frontend is a static Vite build with no server-side rendering, so it
   deploys as static files to a CDN (Netlify).
 - The backend is a stateless Express API; auth is JWT-based (no sessions),
@@ -45,25 +44,38 @@ Browser (mobile/desktop) users[] / tasks[]
 ## Project structure
 
 taskflow/
+├── README.md
+├── .gitignore
 ├── backend/
-│ ├── server.js # entrypoint (binds the port)
-│ ├── src/
-│ │ ├── app.js # Express app factory (used directly by tests)
-│ │ ├── db.js # in-memory data store
-│ │ ├── middleware/auth.js
-│ │ └── routes/{auth,tasks}.js
-│ └── tests/
-│ ├── auth.test.js # 6 tests
-│ └── tasks.test.js # 8 tests
+│   ├── server.js
+│   ├── package.json
+│   ├── .env.example
+│   ├── src/
+│   │   ├── app.js
+│   │   ├── db.js
+│   │   ├── middleware/
+│   │   └── routes/
+│   └── tests/
+│       ├── auth.test.js
+│       └── tasks.test.js
 ├── frontend/
-│ ├── src/
-│ │ ├── App.jsx
-│ │ ├── api.js # fetch wrapper for the backend API
-│ │ └── components/{LoginForm,RegisterForm,TaskForm,TaskItem,TaskList}.jsx
-│ └── tests/ # 5 files, 14 tests total
+│   ├── index.html
+│   ├── package.json
+│   ├── netlify.toml
+│   ├── .env.example
+│   ├── vite.config.js
+│   ├── public/favicon.svg
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── api.js
+│   │   ├── main.jsx
+│   │   ├── index.css
+│   │   └── components/
+│   └── tests/
 └── e2e/
-└── tests/flow.spec.js # register -> add task -> see it -> delete it
-
+    ├── package.json
+    ├── playwright.config.js
+    └── tests/flow.spec.js
 
 ## Prerequisites
 
