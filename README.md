@@ -1,5 +1,5 @@
 # TaskFlow
-Week 5 | Task 1 of my Internship at Neurofive Solutions
+Week 5 | Task 2 of my Internship at Neurofive Solutions
 
 A minimal full-stack task manager. Built in Week 5 to demonstrate testing
 across the whole stack (unit/component/integration/E2E), then deployed to
@@ -13,24 +13,22 @@ production with a performance and SEO pass.
 
 ## Live app
 
-- **Frontend:** _add your Netlify URL here after deploying_
-- **Backend API:** _add your Render URL here after deploying_ (health
-  check: `/api/health`)
+- **Frontend:** https://helpful-kangaroo-38602d.netlify.app
+- **Backend API:** https://taskflow-api-yv9d.onrender.com (health check: `/api/health`)
 
 ## Architecture overview
 
-```
-┌─────────────────────┐        HTTPS / JSON        ┌──────────────────────┐
-│   Frontend (SPA)     │ ──────────────────────────▶│   Backend (API)      │
-│   React + Vite       │                             │   Node.js + Express  │
-│   hosted on Netlify  │◀──────────────────────────  │   hosted on Render   │
-└──────────┬───────────┘        Bearer JWT           └───────────┬──────────┘
-           │                                                     │
-           │ static build (dist/) served via Netlify's CDN       │ in-memory
-           │ VITE_API_URL points at the Render backend           │ data store
-           ▼                                                     ▼
-      Browser (mobile/desktop)                          users[] / tasks[]
-```
+┌─────────────────────┐ HTTPS / JSON ┌──────────────────────┐
+│ Frontend (SPA) │ ──────────────────────────▶│ Backend (API) │
+│ React + Vite │ │ Node.js + Express │
+│ hosted on Netlify │◀────────────────────────── │ hosted on Render │
+└──────────┬───────────┘ Bearer JWT └───────────┬──────────┘
+│ │
+│ static build (dist/) served via Netlify's CDN │ in-memory
+│ VITE_API_URL points at the Render backend │ data store
+▼ ▼
+Browser (mobile/desktop) users[] / tasks[]
+
 
 - The frontend is a static Vite build with no server-side rendering, so it
   deploys as static files to a CDN (Netlify).
@@ -46,27 +44,26 @@ production with a performance and SEO pass.
 
 ## Project structure
 
-```
 taskflow/
 ├── backend/
-│   ├── server.js            # entrypoint (binds the port)
-│   ├── src/
-│   │   ├── app.js           # Express app factory (used directly by tests)
-│   │   ├── db.js            # in-memory data store
-│   │   ├── middleware/auth.js
-│   │   └── routes/{auth,tasks}.js
-│   └── tests/
-│       ├── auth.test.js     # 6 tests
-│       └── tasks.test.js    # 8 tests
+│ ├── server.js # entrypoint (binds the port)
+│ ├── src/
+│ │ ├── app.js # Express app factory (used directly by tests)
+│ │ ├── db.js # in-memory data store
+│ │ ├── middleware/auth.js
+│ │ └── routes/{auth,tasks}.js
+│ └── tests/
+│ ├── auth.test.js # 6 tests
+│ └── tasks.test.js # 8 tests
 ├── frontend/
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── api.js           # fetch wrapper for the backend API
-│   │   └── components/{LoginForm,RegisterForm,TaskForm,TaskItem,TaskList}.jsx
-│   └── tests/               # 5 files, 14 tests total
+│ ├── src/
+│ │ ├── App.jsx
+│ │ ├── api.js # fetch wrapper for the backend API
+│ │ └── components/{LoginForm,RegisterForm,TaskForm,TaskItem,TaskList}.jsx
+│ └── tests/ # 5 files, 14 tests total
 └── e2e/
-    └── tests/flow.spec.js   # register -> add task -> see it -> delete it
-```
+└── tests/flow.spec.js # register -> add task -> see it -> delete it
+
 
 ## Prerequisites
 
@@ -197,7 +194,6 @@ npx playwright test --headed
   never included in any API response.
 - Task ownership is checked server-side on every read/update/delete, so one
   user can't touch another user's tasks (covered by a dedicated test).
-<<<<<<< HEAD
 
 ## Deployment
 
@@ -211,8 +207,7 @@ npx playwright test --headed
    - **Build command:** `npm install`
    - **Start command:** `npm start`
 4. Add environment variables in the Render dashboard: `JWT_SECRET`
-   (generate a long random string) and `CORS_ORIGIN` (your Netlify URL —
-   you'll add this after step below, then redeploy).
+   (generate a long random string) and `CORS_ORIGIN` (your Netlify URL).
 5. Deploy. Confirm it's up: `https://<your-service>.onrender.com/api/health`
    should return `{"status":"ok"}`.
 
@@ -220,14 +215,9 @@ npx playwright test --headed
 
 1. `cd frontend && npm run build` locally to sanity-check the build.
 2. On [app.netlify.com](https://app.netlify.com): drag-and-drop the
-   `frontend/dist` folder (Netlify Drop), **or** connect the GitHub repo
-   with base directory `frontend` and build command `npm run build`,
-   publish directory `dist`.
-3. In **Site settings → Environment variables**, add `VITE_API_URL` set to
-   your Render backend URL + `/api` (e.g.
-   `https://taskflow-api.onrender.com/api`). If you used Netlify Drop
-   instead of a connected repo, rebuild locally with the var set and
-   re-drop `dist`.
+   `frontend/dist` folder (Netlify Drop).
+3. Add `VITE_API_URL` set to your Render backend URL + `/api` in the
+   `frontend/.env` file before building, so it's baked into the build.
 4. Go back to Render and set `CORS_ORIGIN` to your live Netlify URL, then
    redeploy the backend so it accepts requests from the deployed frontend.
 5. Open the Netlify URL, register an account, add a task, confirm it
@@ -253,14 +243,12 @@ Changes made ahead of the Lighthouse audit, and why:
 
 ### Lighthouse scores
 
-| | Before | After |
+| | Mobile | Desktop |
 | --- | --- | --- |
-| Performance | _fill in_ | _fill in_ |
-| Accessibility | _fill in_ | _fill in_ |
-| Best Practices | _fill in_ | _fill in_ |
-| SEO | _fill in_ | _fill in_ |
-
-_Run Lighthouse in Chrome DevTools (or [PageSpeed Insights](https://pagespeed.web.dev/)) against the deployed Netlify URL, before and after these changes, and paste the scores above for the video._
+| Performance | 99 | 100 |
+| Accessibility | 100 | 100 |
+| Best Practices | 100 | 100 |
+| SEO | 91 | 91 |
 
 ## SEO essentials
 
@@ -300,5 +288,3 @@ Once live, verify on the actual deployed URL (not localhost):
    mobile and desktop
 3. Show the before/after Lighthouse scores side by side (screenshot or
    DevTools Lighthouse tab) and briefly name the 3 fixes above
-=======
->>>>>>> 63ba405a7994231372d0fcf94a2c14493e073c78
